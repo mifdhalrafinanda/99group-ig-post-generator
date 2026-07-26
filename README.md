@@ -1,6 +1,6 @@
 # Weekly IG Post Generator — 99 Group AI Assessment
 
-**Option A** — Auto-generate Instagram posts from the latest property news, built end-to-end in n8n.
+Auto-generate Instagram posts from the latest property news, built end-to-end in n8n.
 
 ## Live Result
 
