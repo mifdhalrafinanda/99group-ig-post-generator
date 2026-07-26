@@ -99,7 +99,7 @@
             {
               "id": "13726105-851b-4e69-852b-38de27206445",
               "name": "imageUrl",
-              "value": "https://events.rumah123.com/wp-content/uploads/sites/38/2023/10/26161801/Agen-properti-sukses-di-rumah123.jpg",
+              "value": "YOUR_IMAGE_LINK_HERE",
               "type": "string"
             }
           ]
@@ -133,7 +133,7 @@
             },
             {
               "name": "access_token",
-              "value": "IGAANe76uJjopBZAFlGTDJkNzJsS2VfeGRJTV9ibFdzbl9zMHhaVDdwUHZApbF8tTFJsaXY1eGZANZAGtxaXFTdG05OGdESGNhYXdBVXdCcGdNUzlRNkR5ZAnVhMGZAuQUNKZAmsyV3otaVljQnB0RVVwM0FxcUlkWkRQOFN6S1FSVUcxawZDZD"
+              "value": "YOUR_ACCESS_TOKEN_HERE"
             }
           ]
         },
@@ -162,7 +162,7 @@
             },
             {
               "name": "access_token",
-              "value": "IGAANe76uJjopBZAFlGTDJkNzJsS2VfeGRJTV9ibFdzbl9zMHhaVDdwUHZApbF8tTFJsaXY1eGZANZAGtxaXFTdG05OGdESGNhYXdBVXdCcGdNUzlRNkR5ZAnVhMGZAuQUNKZAmsyV3otaVljQnB0RVVwM0FxcUlkWkRQOFN6S1FSVUcxawZDZD"
+              "value": "YOUR_ACCESS_TOKEN_HERE"
             }
           ]
         },
