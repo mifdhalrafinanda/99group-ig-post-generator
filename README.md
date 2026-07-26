@@ -1,4 +1,4 @@
-# Weekly IG Post Generator — 99 Group AI Assessment
+# Weekly IG Post Generator (99 Group AI Assessment)
 
 Auto-generate Instagram posts from the latest property news, built end-to-end in n8n.
 
@@ -45,15 +45,14 @@ Berita minggu ini:
 
 ## Pipeline steps in detail
 
-1. **Schedule Trigger** — fires every Monday at 08:00.
-2. **RSS Read** — pulls the latest items from a Google News RSS query filtered for Indonesian property news.
-3. **Code (JavaScript)** — sorts all items by actual publish date (RSS order isn't chronological), keeps the top 5, splits each title into headline + source, and joins everything into one text block.
-4. **Basic LLM Chain + Gemini** — generates the caption from that text block using the prompt above.
-5. **Edit Fields (Set)** — assembles the final `caption` and `imageUrl` fields the publish step needs.
-6. **HTTP Request (create container)** — `POST /{ig-user-id}/media` with `image_url`, `caption`, and `access_token`.
-7. **HTTP Request (publish)** — `POST /{ig-user-id}/media_publish` with the returned `creation_id`, which puts the post live.
+1. **Schedule Trigger** --> fires every Monday at 08:00.
+2. **RSS Read** --> pulls the latest items from a Google News RSS query filtered for Indonesian property news.
+3. **Code (JavaScript)** --> sorts all items by actual publish date (RSS order isn't chronological), keeps the top 5, splits each title into headline + source, and joins everything into one text block.
+4. **Basic LLM Chain + Gemini** --> generates the caption from that text block using the prompt above.
+5. **Edit Fields (Set)** --> assembles the final `caption` and `imageUrl` fields the publish step needs.
+6. **HTTP Request (create container)** --> `POST /{ig-user-id}/media` with `image_url`, `caption`, and `access_token`.
+7. **HTTP Request (publish)** --> `POST /{ig-user-id}/media_publish` with the returned `creation_id`, which puts the post live.
 
 ## Repo contents
 
-- `workflow.json` — full n8n workflow export (credentials/tokens removed — replace `YOUR_ACCESS_TOKEN_HERE` with your own Instagram access token before importing)
-- `template-post-properti.jpg` — the branded template image used as the post's visual
+- `workflow.json` — full n8n workflow export (credentials/tokens removed, replace `YOUR_ACCESS_TOKEN_HERE` with your own Instagram access token before importing, replace `YOUR_IMAGE_LINK_HERE` with your own image url before importing)
