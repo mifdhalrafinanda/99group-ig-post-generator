@@ -1,0 +1,274 @@
+{
+  "name": "Weekly IG Post Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "448b2154-f20b-4be7-81d0-1864a3e4f9e3",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://news.google.com/rss/search?q=properti+indonesia&hl=id&gl=ID&ceid=ID:id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4e428c77-99f9-41dc-8b84-85a7e809a631",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst articles = items.map(item => {\n  const rawTitle = item.json.title;\n  const lastDash = rawTitle.lastIndexOf(' - ');\n  const title = lastDash !== -1 ? rawTitle.slice(0, lastDash) : rawTitle;\n  const source = lastDash !== -1 ? rawTitle.slice(lastDash + 3) : 'Tidak diketahui';\n\n  return {\n    title,\n    link: item.json.link,\n    pubDate: new Date(item.json.pubDate),\n    source\n  };\n});\n\narticles.sort((a, b) => b.pubDate - a.pubDate);\n\nconst topArticles = articles.slice(0, 5);\n\nconst combinedText = topArticles\n  .map((a, i) => `${i + 1}. ${a.title} (sumber: ${a.source})\\n${a.link}`)\n  .join('\\n\\n');\n\nreturn [{ json: { combinedText } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "163a4934-4d63-4237-800c-dc77d440caab",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Kamu adalah admin media sosial 99 Group, perusahaan properti. Berdasarkan lima berita properti minggu ini di bawah, buat satu caption Instagram dalam Bahasa Indonesia dengan struktur berikut: satu kalimat hook pembuka yang menarik perhatian, 2-3 kalimat insight yang merangkum tren dari berita-berita ini, satu kalimat call-to-action singkat, dan 5-8 hashtag properti Indonesia yang relevan. Tulis dengan gaya profesional tapi ramah, maksimal 150 kata.\n\nBerita minggu ini:\n{{ $json.combinedText }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        624,
+        0
+      ],
+      "id": "06048d2f-4eb3-47cd-97b8-8fecf852b74a",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        208
+      ],
+      "id": "98daa233-4c6d-4af9-9180-4487188f5966",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "f5OT6FyoxsymJ9vY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c9973ec7-1706-4a67-bc8b-48e92593a826",
+              "name": "caption",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "13726105-851b-4e69-852b-38de27206445",
+              "name": "imageUrl",
+              "value": "https://events.rumah123.com/wp-content/uploads/sites/38/2023/10/26161801/Agen-properti-sukses-di-rumah123.jpg",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        0
+      ],
+      "id": "85d45f8b-9dfa-4483-b4b7-a78bac318d46",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.instagram.com/v21.0/27045950061749324/media",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "image_url",
+              "value": "={{ $json.imageUrl }}"
+            },
+            {
+              "name": "caption",
+              "value": "={{ $json.caption }}"
+            },
+            {
+              "name": "access_token",
+              "value": "IGAANe76uJjopBZAFlGTDJkNzJsS2VfeGRJTV9ibFdzbl9zMHhaVDdwUHZApbF8tTFJsaXY1eGZANZAGtxaXFTdG05OGdESGNhYXdBVXdCcGdNUzlRNkR5ZAnVhMGZAuQUNKZAmsyV3otaVljQnB0RVVwM0FxcUlkWkRQOFN6S1FSVUcxawZDZD"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1168,
+        0
+      ],
+      "id": "a818ca42-89d2-4a05-b2ee-5a2ddfa3e596",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.instagram.com/v21.0/27045950061749324/media_publish",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "creation_id",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "name": "access_token",
+              "value": "IGAANe76uJjopBZAFlGTDJkNzJsS2VfeGRJTV9ibFdzbl9zMHhaVDdwUHZApbF8tTFJsaXY1eGZANZAGtxaXFTdG05OGdESGNhYXdBVXdCcGdNUzlRNkR5ZAnVhMGZAuQUNKZAmsyV3otaVljQnB0RVVwM0FxcUlkWkRQOFN6S1FSVUcxawZDZD"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1376,
+        0
+      ],
+      "id": "aa610c6c-b79e-45b5-844b-6fcf428a30e8",
+      "name": "HTTP Request1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "46a733c3-70c6-4be0-bed5-cfdfb977b2c4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b74720aff310b87f4d62b9e63152e6386a2c7229fce9f45d4e3b09a821b04cff"
+  },
+  "nodeGroups": [],
+  "id": "fXd74eWE4EFtdRgN",
+  "tags": []
+}
