@@ -4,7 +4,7 @@ Auto-generate Instagram posts from the latest property news, built end-to-end in
 
 ## Live Result
 
-- Published post: https://www.instagram.com/p/DbOGhQfGT93/
+- Published post: https://www.instagram.com/p/DbPSoxcmXdX/
 - Workflow status: Published/active in n8n, scheduled to run every Monday at 08:00
 
 ## Architecture
