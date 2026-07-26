@@ -55,4 +55,4 @@ Berita minggu ini:
 
 ## Repo contents
 
-- `workflow.json` — full n8n workflow export (credentials/tokens removed, replace `YOUR_ACCESS_TOKEN_HERE` with your own Instagram access token before importing, replace `YOUR_IMAGE_LINK_HERE` with your own image url before importing)
+- `workflow.json` --> full n8n workflow export (credentials/tokens removed, replace `YOUR_ACCESS_TOKEN_HERE` with your own Instagram access token before importing, replace `YOUR_IMAGE_LINK_HERE` with your own image url before importing)
